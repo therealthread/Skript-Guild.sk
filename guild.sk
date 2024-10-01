@@ -1,0 +1,501 @@
+LOAD:
+	delete {guild::no::casing::*} #V2 | Made by _thread
+
+options:
+
+	API-SKRIPT: TAB #Eklenti komutu | executing
+
+	PERMISSION: admin.guilds
+	maximumPlayers: 10          #Bu sayı idealdir.
+	prefix: &3Lonca &8»
+	loncaDuyuruPrefix: &d&l[LONCA DUYURU]
+	loncaSohbetPrefix: &6&l[LONCA]
+	maximumCharManager: 10
+	
+	zatenLoncanYok: &cBir loncaya üye değilsin.
+	zatenBirLoncayaÜyesin: &cZaten bir loncaya üyesin.
+	zatenBirLoncayaSahipsin: &cZaten bir loncaya sahipsin.
+	zatenBirLoncayaİstekGöndermişsiniz: &cZaten bir loncaya istek göndermişsiniz.
+	zatenBöyleBirLoncaVar: &cZaten böyle bir isimde lonca var.
+	sadeceKurucuVeModeratörKomutları: &cBu komutu kullanabilmek için Kurucu veya Moderatör olmalısın.
+	buLoncanınKurucusuSenDeğilsin: &cBu loncanın kurucusu siz değilsiniz.
+	bunuYalnızcaKurucularKullanabilir: &cBu komutu yalnızca kurucular kullanabilir.
+	birOyuncuAdıGirin: &cLütfen bir oyuncu adı girin.
+	birLoncaAdıGirin: &cLütfen bir lonca adı girin.
+	böyleBirLoncaYok: &cBöyle bir lonca bulunamadı.
+	loncaKapılarıHerkeseAçıldı: &eLoncanın kapıları herkese &b&naçıldı.
+	loncaKapılarıHerkeseKapandı: &eLoncanın kapıları herkese &b&nkapatıldı.
+	buOyuncuSizinLoncanızınBirÜyesiDeğil: &cBu oyuncu loncanızın bir üyesi değil.
+	locayaPuanGönderildi: &b%arg 2%&e adlı loncaya &6&l%arg 3%&e puan gönderildi. [%{guild::point::%{_argument}%}%]
+	loncadanPuanSilindi: &b%arg 2%&e adlı loncadan &6&l%arg 3%&e puan silindi. [%{guild::point::%{_argument}%}%]
+	doğruKullanımPoints: &eKullanım:&6 /%{_cmd}% givePoint / removePoint (lonca) (miktar)
+	doğruKullanımSettings: &eKullanım:&6 /%{_cmd}% settings &7[joined]
+	birSayıGir: &cLütfen bir sayı girin.
+	lütfenBirşeylerYazın: &cLütfen bir şeyler yazın.
+	istekKabulEdildi: &a%{guild::Has::%{_argument}%}%&e adlı lonca istedğinizi kabul etti.
+	buOyuncuKatılmaİsteğiGöndermemiş: &cBu oyuncu loncanıza katılma isteği göndermemiş.
+	istekGönderildi: &eİstek gönderildi eğer aktif kurucu veya moderatör%nl%&eyoksa isteğiniz kabul edilmeyebilir.
+	istekİptalEdildi: &c%{_p}%&e adlı oyuncunun katılma isteği iptal edildi.
+	maksimum: &cBu loncaya daha fazla kişi katılamaz.
+	loncaÜyesiDeğil: &cBöyle bir oyuncu bulunamadı.
+	zatenModeratör: &cBu oyuncu zaten Moderatör
+	onaylamakİçinTıkla: &dOnaylamak için tıkla!
+	isteğiKabulEt: &b%{_p}%&e adlı oyuncu loncaya katılmak için istek gönderdi!
+	buLoncaZatenAçık: &eBu lonca zaten herkese açık! &b/%{_cmd}% join %arg 2%&e%nl%&ekomutunu kullanın.
+	loncaKurucusuSensin: &cBu loncanın kurucusu siz olduğunuz için%nl%&cayrılamazsınız.
+	kurucuyuLoncadanAtamazsın: &cKurucuyu loncadan atamazsınız.
+	loncadanAyrıldın: &c%{guild::Has::%{_p}%}%&e adlı loncadan ayrıldın!
+	loncaSilindi: &c%{_guild}%&e adlı lonca silindi.
+	loncadanAttın: &c%arg 2%&e adlı oyuncu loncadan atıldı.
+	loncadanAtıldın: &c%{guild::Has::%{_argument}%}%&e adlı loncadan atıldın!
+	istekGöndermekİstiyorMusun: %nl%%nl%&6&l%{_g}%&0 adlı loncaya katılmak istiyor musunuz?%nl%%nl%
+	loncanızaKatıldı: &a%{_p}%&e isimli oyuncu sizin loncanıza katıldı.
+	loncayaKatıldın: &a%{_argument}%&e adlı loncaya katıldın.
+	loncayaKatıldı: &a%{_other}%&e adlı oyuncun &b%{_guild}% &eadlı loncaya katıldı.
+	loncanızdanAyrıldı: &c%{_p}%&e adlı oyuncu sizin loncanızdan çıktı!
+	moderatörlüktenAtıldın: &c%{_guild}%&e adlı loncanın &dModeratörülüğünden&e atıldınız!
+	artıkModeratör: &6%arg 2%&e adlı oyuncu artık&b %{_guild}% &eloncasında%nl%&dModeratör&e.
+	artıkModeratörsünüz: &eArtık&b %{_guild}%&e loncasında &dModeratör&e yetkisine%nl%&esahipsiniz.
+	oluşturuldu: &b%{_argument}%&e isimli lonca oluşturuldu.
+
+	adminCommandForPermission: &cBu komutu kullanmak için izniniz yok!
+	maximumChar: &cOluşturacağınız lonca maksimum &4{@maximumCharManager}&c kelime içermelidir.
+	
+quit:
+	set {_p} to event-player
+	{guild::request::%{_p}%} is set:
+		send formatted messageManager("{@prefix} {@istekİptalEdildi}") to {guild::owner::%{guild::request::%{_p}%}%}
+		delete {guild::request::%{_p}%}
+
+command guilds [<Text>] [<Text>] [<Number>]:
+	cooldown: 3 seconds
+	cooldown message: {@prefix} &cTekrar komut kullanmak için 3 saniye bekleyin!
+	aliases: g, lonca, l, guild
+	trigger:
+	
+		set {_argument} to arg 2 parsed as player
+		set {_p} to player
+		set {_guild} to {guild::Has::%{_p}%}
+		set {_cmd} to command
+
+		arg 1 is not set:
+			send "%nl%&6&lLONCA%nl%"
+			send "&6/%{_cmd}% &f- &eLonca komutlarını gösterir."
+			send "&6/%{_cmd}% join <Lonca ismi> &f- &eBaşka bir loncaya katılabilirsin."
+			send "&6/%{_cmd}% create <İsim> &f- &eLonca oluşturur."
+			send "&6/%{_cmd}% delete &f- &eLoncanızı kapatır."
+			send "&6/%{_cmd}% leave &f- &eMevcut loncadan ayrılırsınız."
+			send "&6/%{_cmd}% info &f- &eLonca bilgilerini listeler."
+			send "&6/%{_cmd}% accept/request <Oyuncu> &f- &eİstek/kabul."
+			send "&6/%{_cmd}% broadcast <Mesaj> &f- &eLonca duyurusu."
+			send "&6/%{_cmd}% chat <Mesaj> &f&e Lonca sohbet."
+			send "&6/%{_cmd}% rankup <Oyuncu> &f- &eBir oyuncuyu Moderatörlüğe terfi eder."
+			send "&6/%{_cmd}% settings (Joined) &f- &eLoncanın kapılarını açar/kapatır."
+			{_p} has permission "{@PERMISSION}":
+				send "%nl%&c&lAdmin Komutları&c (Yetki: {@PERMISSION})%nl%"
+				send "&6/%{_cmd}% givePoint (lonca) &f- &eLoncadan puan siler."
+				send "&6/%{_cmd}% givePoint (lonca) &f- &eLoncaya puan verir."
+				send "&6/%{_cmd}% list &f- &eLoncaları listeler."
+				send "&6/%{_cmd}% debug &f -&e Herşeyi sıfırlar.%nl%"
+
+		arg 1 is "givePoint":
+			set {_argument} to arg 2
+			{_p} has permission "{@PERMISSION}":
+				arg 2 is set:
+					arg 3 is set:
+						arg 3 is number:
+							{guild::All::*} contains arg 2:
+								add arg 3 to {guild::point::%{_argument}%}
+								send formatted messageManager("{@prefix} {@locayaPuanGönderildi}") to sender
+							else:
+								send formatted messageManager("{@prefix} {@böyleBirLoncaYok}") to {_p}
+						else:
+							send formatted messageManager("{@prefix} {@birSayıGir}") to {_p}
+					else:
+						send formatted messageManager("{@prefix} {@birSayıGir}") to {_p}
+				else:
+					send formatted messageManager("{@prefix} {@doğruKullanımPoints}") to {_p}
+			else:
+				send formatted messageManager("{@prefix} {@adminCommandForPermission}") to {_p}			
+				
+		arg 1 is "removePoint":
+			set {_argument} to arg 2
+			{_p} has permission "{@PERMISSION}":
+				arg 2 is set:
+					arg 3 is set:
+						arg 3 is number:
+							{guild::All::*} contains arg 2:
+								remove arg 3 from {guild::point::%{_argument}%}
+								{guild::point::%{_argument}%} < 0:
+									set {guild::point::%{_argument}%} to 0
+								send formatted messageManager("{@prefix} {@loncadanPuanSilindi}") to sender
+							else:
+								send formatted messageManager("{@prefix} {@böyleBirLoncaYok}") to {_p}
+						else:
+							send formatted messageManager("{@prefix} {@birSayıGir}") to {_p}
+					else:
+						send formatted messageManager("{@prefix} {@birSayıGir}") to {_p}
+				else:
+					send formatted messageManager("{@prefix} {@doğruKullanımPoints}") to {_p}
+			else:
+				send formatted messageManager("{@prefix} {@adminCommandForPermission}") to {_p}				
+				
+		arg 1 is "list":
+			{_p} has permission "{@PERMISSION}":
+				debugList({_p})
+			else:
+				send formatted messageManager("{@prefix} {@adminCommandForPermission}") to {_p}				
+		
+		arg 1 is "info":
+		
+			hasGuild({_p}) = "true":
+			
+				guildInfo({_p})
+			else:
+				send formatted messageManager("{@prefix} {@zatenLoncanYok}") to {_p}
+
+		arg 1 is "accept":
+		
+			hasGuild({_p}) = "true":
+				
+				isOwner({_p}) or isModerator({_p})  = "true":
+				
+					arg 2 is set:
+						{guild::request::%{_argument}%} is set:
+							{guild::request::%{_argument}%} = {guild::Has::%{_p}%}:
+								wait a ticks
+								guildManager({_p}, {_argument}, "join")
+							else:
+								send formatted messageManager("{@prefix} {@buOyuncuKatılmaİsteğiGöndermemiş}") to {_p}
+						else:
+							send formatted messageManager("{@prefix} {@buOyuncuKatılmaİsteğiGöndermemiş}") to {_p}
+					else:
+						send formatted messageManager("{@prefix} {@birOyuncuAdıGirin}") to {_p}
+				else:
+					send formatted messageManager("{@prefix} {@sadeceKurucuVeModeratörKomutları}") to {_p}
+			else:
+				send formatted messageManager("{@prefix} {@zatenLoncanYok}") to {_p}
+				
+		arg 1 is "broadcast":
+			
+			hasGuild({_p}) = "true":
+				
+				isOwner({_p}) or isModerator({_p})  = "true":
+
+					arg 2 is set:
+						send formatted messageManager("{@prefix} {@loncaDuyuruPrefix}&e %{_p}%:&f %uncolored arg 2%") to {guild::Members::%{_guild}%::*}
+					else:
+						send formatted messageManager("{@prefix} {@lütfenBirşeylerYazın}") to {_p}
+				else:
+					send formatted messageManager("{@prefix} {@sadeceKurucuVeModeratörKomutları}") to {_p}
+			else:
+				send formatted messageManager("{@prefix} {@zatenLoncanYok}") to {_p}
+
+		arg 1 is "chat":
+		
+			hasGuild({_p}) = "true":
+
+				arg 2 is set:
+					send formatted messageManager("{@prefix} {@loncaSohbetPrefix}&e %{_p}%:&f %uncolored arg 2%") to {guild::Members::%{_guild}%::*}
+				else:
+					send formatted messageManager("{@prefix} {@lütfenBirşeylerYazın}") to {_p}
+			else:
+				send formatted messageManager("{@prefix} {@zatenLoncanYok}") to {_p}
+
+		arg 1 is "request":
+			set {_argument} to arg 2
+			isOwner({_p}) != "true":	
+			
+				hasGuild({_p}) != "true":
+
+					arg 2 is set:
+						{guild::All::*} contains arg 2:
+						
+							{guild::settings::joined::%{_argument}%} is not set:
+							
+								{guild::request::%{_p}%} is not set:
+									set {guild::request::%{_p}%} to {_argument}
+									send formatted messageManager("{@prefix} {@istekGönderildi}") to {_p}
+									play sound "entity.player.levelup" at volume 1 at pitch 0.5 to {_p}
+									send formatted "{@prefix} {@isteğiKabulEt}%nl%<tooltip:{@onaylamakİçinTıkla}><command:/%{_cmd}% accept %{_p}%>&a&l[TIKLA]<reset>" to {guild::owner::%{_argument}%} and {guild::mod::%{_argument}%}							
+								else:
+									play sound "entity.enderman.teleport" at volume 1 at pitch 0.5 to {_p}
+									send formatted messageManager("{@prefix} {@zatenBirLoncayaİstekGöndermişsiniz}") to {_p}
+							else:
+								send formatted messageManager("{@prefix} {@buLoncaZatenAçık}") to {_p}
+						else:
+							send formatted messageManager("{@prefix} {@böyleBirLoncaYok}") to {_p}
+					else:
+						send formatted messageManager("{@prefix} {@birLoncaAdıGirin}") to {_p}
+				else:
+					send formatted messageManager("{@prefix} {@zatenBirLoncayaÜyesin}") to {_p}
+			else:
+				send formatted messageManager("{@prefix} {@zatenBirLoncayaSahipsin}") to {_p}
+				
+		arg 1 is "settings":
+			arg 2 is "joined":
+			
+				hasGuild({_p}) = "true":
+				
+					isOwner({_p}) or isModerator({_p})  = "true":
+					
+						{guild::settings::joined::%{guild::Has::%{_p}%}%} is not set:
+							set {guild::settings::joined::%{guild::Has::%{_p}%}%} to "Herkes"
+							send formatted messageManager("{@prefix} {@loncaKapılarıHerkeseAçıldı}") to {_p}
+						else:
+							delete {guild::settings::joined::%{guild::Has::%{_p}%}%}
+							send formatted messageManager("{@prefix} {@loncaKapılarıHerkeseKapandı}") to {_p}
+					else:
+						send formatted messageManager("{@prefix} {@sadeceKurucuVeModeratörKomutları}") to {_p}
+				else:
+					send formatted messageManager("{@prefix} {@zatenLoncanYok}") to {_p}
+			else:
+				send formatted messageManager("{@prefix} {@doğruKullanımSettings}") to {_p}
+				
+		arg 1 is "kick":
+		
+			hasGuild({_p}) = "true":
+				
+				isOwner({_p}) or isModerator({_p})  = "true":
+				
+					arg 2 is set:
+						arg 2 != {guild::owner::%{guild::Has::%{_argument}%}%}:
+							{guild::Has::%{_p}%} = {guild::Has::%{_argument}%}:
+								delete {guild::mod::%{guild::Has::%{_argument}%}%}
+								remove arg 2 from {guild::Members::%{guild::Has::%{_argument}%}%::*}
+								send formatted messageManager("{@prefix} {@loncadanAttın}") to {_p}
+								
+								tabAPI({_argument}, {_guild}, {_anemys}, "remove")
+								
+								send formatted messageManager("{@prefix} {@loncadanAtıldın}") to {_argument}
+								delete {guild::Has::%{_argument}%}
+							else:
+								send formatted messageManager("{@prefix} {@loncaÜyesiDeğil}") to {_p}
+						else:
+							send formatted messageManager("{@prefix} {@kurucuyuLoncadanAtamazsın}") to {_p}
+					else:
+						send formatted messageManager("{@prefix} {@birOyuncuAdıGirin}") to {_p}
+				else:
+					send formatted messageManager("{@prefix} {@sadeceKurucuVeModeratörKomutları}") to {_p}
+			else:
+				send formatted messageManager("{@prefix} {@zatenLoncanYok}") to {_p}
+				
+		arg 1 is "rankup":
+		
+			hasGuild({_p}) = "true":
+				
+				isOwner({_p}) = "true":
+				
+					arg 2 is set:
+						arg 2 != {guild::owner::%{guild::Has::%{_argument}%}%}:
+							{guild::Has::%{_p}%} = {guild::Has::%{_argument}%}:
+								{guild::mod::%{_guild}%} != {_argument}:
+									send formatted messageManager("{@prefix} {@moderatörlüktenAtıldın}") to {guild::mod::%{_guild}%}
+									set {guild::mod::%{_guild}%} to {_argument}
+									
+									tabAPI({_argument}, {_guild}, "moderator", "add")
+
+									send formatted messageManager("{@prefix} {@artıkModeratör}") to player
+									send formatted messageManager("{@prefix} {@artıkModeratörsünüz}") to {_argument}						
+								else:
+									send formatted messageManager("{@prefix} {@zatenModeratör}") to {_p}
+							else:
+								send formatted messageManager("{@prefix} {@loncaÜyesiDeğil}") to {_p}
+						else:
+							send formatted messageManager("{@prefix} {@bunuYalnızcaKurucularKullanabilir}") to {_p}
+					else:
+						send formatted messageManager("{@prefix} {@birOyuncuAdıGirin}") to {_p}
+				else:
+					send formatted messageManager("{@prefix} {@bunuYalnızcaKurucularKullanabilir}") to {_p}
+			else:
+				send formatted messageManager("{@prefix} {@zatenLoncanYok}") to {_p}
+
+		arg 1 is "join":
+			set {_argument} to arg 2
+
+			isOwner({_p}) != "true":	
+			
+				hasGuild({_p}) != "true":
+
+					arg 2 is set:
+						{guild::All::*} contains arg 2:
+							{guild::settings::joined::%{_argument}%} is set:
+								isTrue({_guild}) = "true":
+									add {_p} to {guild::Members::%{_argument}%::*}
+									set {guild::Has::%{_p}%} to {_argument}
+									
+									tabAPI({_p}, {_argument}, "player", "add")
+									
+									send formatted messageManager("{@prefix} {@loncayaKatıldın}") to {_p}
+									send formatted messageManager("{@prefix} {@loncanızaKatıldı}") to {guild::owner::%{_argument}%} and {guild::mod::%{_argument}%}								
+								else:
+									send formatted messageManager("{@prefix} {@maksimum}") to {_p}
+							else:
+								bookRequest({_p}, {_argument}, {_cmd})
+								play sound "block.note_block.bell" at volume 1 at pitch 0.5 to {_p}
+						else:
+							send formatted messageManager("{@prefix} {@böyleBirLoncaYok}") to {_p}
+					else:
+						send formatted messageManager("{@prefix} {@birLoncaAdıGirin}") to {_p}
+				else:
+					send formatted messageManager("{@prefix} {@zatenBirLoncayaÜyesin}") to {_p}
+			else:
+				send formatted messageManager("{@prefix} {@zatenBirLoncayaSahipsin}") to {_p}
+				
+		arg 1 is "leave":
+		
+			isOwner({_p}) != "true":	
+			
+				hasGuild({_p}) = "true":
+				
+					tabAPI({_p}, {_argument}, {_anemys}, "remove")
+				
+					delete {guild::mod::%{guild::Has::%{_p}%}%}
+					remove {_p} from {guild::Members::%{guild::Has::%{_p}%}%::*}
+					send formatted messageManager("{@prefix} {@loncanızdanAyrıldı}") to {guild::owner::%{guild::Has::%{_p}%}%}
+					send formatted messageManager("{@prefix} {@loncadanAyrıldın}") to player
+					delete {guild::Has::%{_p}%}	
+				else:
+					send formatted messageManager("{@prefix} {@zatenLoncanYok}") to player
+			else:
+				send formatted messageManager("{@prefix} {@loncaKurucusuSensin}") to player
+				
+		arg 1 is "create":
+			set {_argument} to arg 2
+			arg 2 is set:
+				{guild::All::*} doesn't contain arg 2:
+					length of arg 2 <= {@maximumCharManager}:
+						hasGuild({_p}) != "true":
+						
+							tabAPI({_p}, {_argument}, "owner", "add")
+							
+							add {_argument} to {guild::All::*}
+							add {_p} to {guild::Members::%{_argument}%::*}
+							set {guild::Has::%{_p}%} to {_argument}
+							set {guild::owner::%{_argument}%} to {_p}
+							send formatted messageManager("{@prefix} {@oluşturuldu}") to player
+						else:
+							send formatted messageManager("{@prefix} {@zatenBirLoncayaÜyesin}") to player
+					else:
+						send formatted messageManager("{@prefix} {@maximumChar}") to player
+				else:
+					send formatted messageManager("{@prefix} {@zatenBöyleBirLoncaVar}") to player
+			else:
+				send formatted messageManager("{@prefix} {@birLoncaAdıGirin}") to player
+				
+		arg 1 is "delete":
+		
+			hasGuild({_p}) = "true":
+			
+				isOwner({_p}) = "true":	
+
+					remove {_guild} from {guild::All::*}
+							
+					loop {guild::Members::%{_guild}%::*}:
+					
+						tabAPI(loop-value, {_argument}, {_anemys}, "remove")
+						
+						delete {guild::Has::%loop-value%}
+								
+					delete {guild::Members::%{_guild}%::*}
+					delete {guild::owner::%{_guild}%} and {guild::mod::%{_guild}%}
+					delete {guild::point::%{_guild}%}
+								
+					send formatted messageManager("{@prefix} {@loncaSilindi}") to player
+				else:
+					send formatted messageManager("{@prefix} {@bunuYalnızcaKurucularKullanabilir}") to player
+			else:
+				send formatted messageManager("{@prefix} {@zatenLoncanYok}") to player
+				
+		arg 1 is "debug":
+		
+			{_p} has permission "{@PERMISSION}":
+				delete {guild::*}
+			else:
+				send formatted messageManager("{@prefix} {@adminCommandForPermission}") to player
+				
+function isTrue(guild: text) :: String:
+	set {_size} to size of {guild::Members::%{_guild}%::*}
+	{_size} + 1 <= {@maximumPlayers}:
+		set {_boolean} to "true"
+	return "%{_boolean} ? "false"%"
+
+function guildManager(p: player, other: player, type: text):
+	{_type} is "join":
+		set {_guild} to {guild::Has::%{_p}%}
+
+		isTrue({_guild}) = "true":
+		
+			tabAPI({_other}, {_guild}, "player", "add")
+
+			add {_other} to {guild::Members::%{_guild}%::*}
+			set {guild::Has::%{_other}%} to {_guild}
+			send formatted messageManager("{@prefix} {@loncayaKatıldı}") to {guild::Members::%{_guild}%::*}
+		else:
+			send formatted messageManager("{@prefix} {@maksimum}") to {_p} and {_other}
+		delete {guild::request::%{_other}%}
+	
+function messageManager(options: text) :: String:
+	return {_options}
+	
+function debugList(p: player):
+	send "%nl%&8&l> &4Bulunduğun lonca:&c %{guild::Has::%{_p}%} ? "&cYok"%%nl%" to {_p}
+	{guild::All::*} is set:
+		loop {guild::All::*}:
+			add 1 to {_index}
+			send "&7- &6&l%{_index}%. &e%loop-value% &8&l|&3 Kurucu:&b %{guild::owner::%loop-value%}% &8&l|&d Oyuncular:&5 %size of {guild::Members::%loop-value%::*}%/{@maximumPlayers}" to {_p}
+	else:
+		send "&cLonca bulunamadı." to {_p}
+		
+function isOwner(p: player) :: String:
+	{guild::owner::%{guild::Has::%{_p}%}%} = {_p}:
+		set {_boolean} to true
+	return "%{_boolean} ? "false"%"
+	
+function isModerator(p: player) :: String:
+	{guild::mod::%{guild::Has::%{_p}%}%} = {_p}:
+		set {_boolean} to true
+	return "%{_boolean} ? "false"%"
+	
+function hasGuild(p: player) :: String:
+	{guild::Has::%{_p}%} is set:
+		set {_boolean} to true
+	return "%{_boolean} ? "false"%"
+
+function tabAPI(p: player, guild: text, mode: text, stats: text):
+	{_stats} is "add":
+		{_mode} is "owner":
+			set {_star} to "&6✰✰✰"
+		{_mode} is "moderator":
+			set {_star} to "&6✰✰"
+		{_mode} is "player":
+			set {_star} to "&6✰"	
+		set {_guild} to {_guild} in uppercase
+		execute console command "{@API-SKRIPT} player %{_p}% abovename %{_star}% &e%{_guild}%"
+	{_stats} is "remove":
+		execute console command "{@API-SKRIPT} player %{_p}% remove"
+
+function guildInfo(p: player):
+	set {_g} to {guild::Has::%{_p}%}
+	set {_invite} to {guild::settings::joined::%{_g}%} ? "&d&lDavet"
+	set {_i} to a written book
+	set {_a} to "&8&l&0&lLONCA &7»"	
+	set {_b} to "%nl%%nl%&0Kurucu:&4 %{guild::owner::%{_g}%}%%nl%&0Mod: &4%{guild::mod::%{_g}%} ? "&4Yok"%"
+	set {_c} to "%nl%&0Puan: &6&l%{guild::point::%{_g}%} ? "0"%%nl%"
+	set {_e} to "&0Üye girişi: &d&l%{_invite}%%nl%"
+	set {_m::*} to {guild::Members::%{_g}%::*}
+	set {_m::*} to "%{_m::*}%"
+	replace every ", " and " and " in {_m::*} with ", "
+	set {_d} to "&0Oyuncular (%size of {guild::Members::%{_g}%::*}%/{@maximumPlayers}):%nl%%nl%"
+	set page 1 of {_i} to "%{_a}%%{_b}%%{_c}%%{_e}%%{_d}%&7&o%{_m::*}%"
+	wait a ticks
+	open book {_i} to {_p}
+	
+function bookRequest(p: player, g: text, cmd: text):
+	set {_i} to a written book
+	set {_a} to "&8&l&0&lLONCA &7»&b<tooltip:&cKapatmak için tıkla.><command:>           &4&l[X]<reset>%nl%"
+	set {_b} to "        &b<tooltip:{@onaylamakİçinTıkla}><command:/%{_cmd}% request %{_g}%>&a&l[TIKLA]<reset>"
+	set {_d} to "{@istekGöndermekİstiyorMusun}"
+	set page 1 of {_i} to "%{_a}%%{_d}%%{_b}%"
+	wait a ticks
+	open book {_i} to {_p}	
